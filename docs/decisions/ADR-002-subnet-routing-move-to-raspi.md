@@ -7,6 +7,6 @@ This was fixed by migrating the subnet routing to a Raspberry Pi 4 that I have a
 # Comparisons
 
 | Proxmox Subnet Router Host | RasPi4B Subnet Router Host |
---------------
+|--------------|-----------|
 | Not always on since the data center draws a lot of power | Always on with lower power draw |
 | Can and has locked me out of the server | Will not lock me out unless a system failure shuts down the pi |
