@@ -1,11 +1,11 @@
-# IP Allocation
+# IP Allocation PUBLIC FACING
 
 **Subnet:** 192.168.0.0/24  
 **Gateway:** 192.168.0.1  
-**DNS:** 192.168.0.1 (router) 
+**DNS:** 192.168.0.1 (router)  
 **Last updated:** June 2026
 
-> This is a record of static IP assignments. Before assigning an IP to a new VM, check this file first. Update it immediately after deploying anything new.
+> This is a template showing the IP range structure and naming conventions used in this server. MAC addresses and Tailscale IPs are maintained privately.
 
 ---
 
@@ -30,9 +30,9 @@
 | IP | Hostname | Device | Role | Notes |
 |----|----------|--------|------|-------|
 | `192.168.0.1` | — | TP-Link AX1300 | Router / gateway / DNS | Wi-Fi 6, AP isolation disabled |
-| `192.168.0.103` | `proxmox-datacenter` | Dell PowerEdge R510 | Proxmox VE host | NIC1 (nic0) · MAC `00:26:B9:5E:EF:F1` |
+| `192.168.0.103` | `proxmox-datacenter` | Dell PowerEdge R510 | Proxmox VE host | NIC1 (nic0) |
 | `192.168.0.104` | — | — | *Reserved* | — |
-| `192.168.0.105` | — | Dell PowerEdge R510 | iDRAC6 Enterprise | Dedicated NIC · MAC `00:26:B9:5E:EF:F3` · local only |
+| `192.168.0.105` | — | Dell PowerEdge R510 | iDRAC6 Enterprise | Dedicated NIC · local only |
 | `192.168.0.106–109` | — | — | *Reserved for physical hosts* | — |
 
 ---
@@ -86,12 +86,12 @@
 
 ## Tailscale Addresses (100.x.x.x)
 
-| Tailscale IP | Hostname | Device | Notes |
-|--------------|----------|--------|-------|
-| `100.107.96.110` | `proxmox-datacenter` | Dell PowerEdge R510 | Proxmox host |
-| `100.73.90.114` | `ethan-fedora` | Fedora workstation | Primary client machine |
-| `100.70.197.113` | `k3s-raspi4b-1` | Raspberry Pi 4B | k3s node · subnet router for `192.168.0.0/24` |
-| `100.108.213.48` | `omen-server` | Omen server | — |
+| Hostname | Device | Notes |
+|----------|--------|-------|
+| `proxmox-datacenter` | Dell PowerEdge R510 | Proxmox host |
+| `ethan-fedora` | Fedora workstation | Primary client machine |
+| `k3s-raspi4b-1` | Raspberry Pi 4B | k3s node · subnet router for `192.168.0.0/24` |
+| `omen-server` | Omen server | — |
 
 ---
 
@@ -111,16 +111,6 @@ Templates are prefixed with `tmpl-`: `tmpl-postgres`, `tmpl-k3s-node`, etc.
 
 ---
 
-## Adding a New VM — Checklist
-
-- [ ] Pick the next available IP in the correct range
-- [ ] Assign the IP statically via Cloud-Init (not DHCP)
-- [ ] Name the VM following the naming convention above
-- [ ] Add it to this file immediately
-- [ ] Add a static DHCP lease in the router as a backup (belt-and-suspenders)
-- [ ] Add a note in the Proxmox UI (VM → Notes tab)
-- [ ] Update `topology.md` if it changes the network diagram
-
----
+> **Security note:** MAC addresses and Tailscale IPs have been redacted. Real values are maintained privately.
 
 *See also: [topology.md](topology.md) · [Hardware & Setup](../hardware/proxmox-setup.md)*
