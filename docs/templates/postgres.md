@@ -1,0 +1,1 @@
+# postgres VM template

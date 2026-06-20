@@ -1,0 +1,1 @@
+# dev-station VM template
