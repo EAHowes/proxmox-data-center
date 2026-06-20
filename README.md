@@ -2,6 +2,7 @@
 
 Personal homelab running on a Dell PowerEdge R510 with Proxmox VE. This repo contains documentation for infrastructure, configuration, and automation.
 
+**Note: ** For security, some information has been redacted or omitted from this repo and are maintained privately.
 ---
 
 ## Hardware
