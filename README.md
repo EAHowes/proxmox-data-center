@@ -70,10 +70,10 @@ TP-Link AX1300 (192.168.0.1)
     └── iDRAC6              192.168.0.105   Out-of-band management
 
 Tailscale Overlay (100.x.x.x)
-    ├── proxmox-datacenter  100.107.96.110
-    ├── ethan-fedora        100.73.90.114
-    ├── k3s-raspi4b-1       100.70.197.113
-    └── omen-server         100.108.213.48
+    ├── proxmox-datacenter  100.xxx.xxx.xxx
+    ├── ethan-fedora        100.xxx.xxx.xxx
+    ├── k3s-raspi4b-1       100.xxx.xxx.xxx
+    └── omen-server         100.xxx.xxx.xxx
 ```
 
 ---
