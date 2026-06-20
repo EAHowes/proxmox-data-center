@@ -1,10 +1,12 @@
-# Network Topology
+# Network Topology PUBLIC FACING
 
 **Last updated:** June 2026  
 **Subnet:** 192.168.0.0/24  
 **Gateway:** 192.168.0.1
 
 ---
+
+> **Note:** This is a demo file with all sensitive information scrubbed from it.
 
 ## Physical Network
 
@@ -16,7 +18,7 @@ graph TD
     Gateway / DNS"]
 
     subgraph r510["Dell PowerEdge R510"]
-        proxmox["Proxmox VE 9.2.3
+        proxmox["Proxmox VE 9.x
         proxmox-datacenter
         192.168.0.103
         NIC1 · nic0"]
@@ -26,10 +28,8 @@ graph TD
         Dedicated NIC"]
 
         subgraph bridge["vmbr0 Bridge (192.168.0.0/24)"]
-            nic1["nic0 (Gb1)
-            00:26:B9:5E:EF:F1"]
+            nic1["nic0 (Gb1)"]
             nic2["nic1 (Gb2)
-            00:26:B9:5E:EF:F2
             (unassigned)"]
         end
 
@@ -54,18 +54,18 @@ graph TD
 graph LR
     subgraph tailscale["Tailscale Mesh (100.x.x.x)"]
         proxmox["proxmox-datacenter
-        100.107.96.110"]
+        100.xxx.xxx.xxx"]
 
         fedora["ethan-fedora
-        100.73.90.114"]
+        100.xxx.xxx.xxx"]
 
         raspi["k3s-raspi4b-1
-        100.70.197.113
-        subnet router
+        100.xxx.xxx.xxx
+        ⚡ subnet router
         192.168.0.0/24"]
 
         omen["omen-server
-        100.108.213.48"]
+        100.xxx.xxx.xxx"]
     end
 
     fedora <-->|MagicDNS| proxmox
@@ -130,7 +130,7 @@ As VMs are deployed they will occupy static IPs in the `192.168.0.0/24` subnet. 
 | `192.168.0.200–219` | Infrastructure services (Pi-hole, NetBox, Nginx PM) |
 | `192.168.0.220–254` | DHCP / unmanaged devices |
 
-> Full IP assignments: [ip-allocation.md](ip-allocation.md)
+> Full IP assignments are maintained privately. See [ip-allocation.md](ip-allocation.md) for the public template.
 
 ---
 
@@ -140,10 +140,10 @@ As VMs are deployed they will occupy static IPs in the `192.168.0.0/24` subnet. 
 
 | Interface | MAC | IP | Speed | Role |
 |-----------|-----|----|-------|------|
-| `nic0` (Gb1) | `00:26:B9:5E:EF:F1` | — | 1Gb/s | Bridge port for vmbr0 |
-| `nic1` (Gb2) | `00:26:B9:5E:EF:F2` | — | 1Gb/s | Unassigned |
+| `nic0` (Gb1) | `xx:xx:xx:xx:xx:x1` | — | 1Gb/s | Bridge port for vmbr0 |
+| `nic1` (Gb2) | `xx:xx:xx:xx:xx:x2` | — | 1Gb/s | Unassigned |
 | `vmbr0` | — | `192.168.0.103/24` | 1Gb/s | Linux bridge — all VM traffic |
-| iDRAC (dedicated) | `00:26:B9:5E:EF:F3` | `192.168.0.105` | 100Mb/s | Out-of-band management |
+| iDRAC (dedicated) | `xx:xx:xx:xx:xx:x3` | `192.168.0.105` | 100Mb/s | Out-of-band management |
 
 ### Additional NICs (not yet installed)
 
@@ -152,7 +152,7 @@ As VMs are deployed they will occupy static IPs in the `192.168.0.0/24` subnet. 
 | Intel 10GbE | 10Gb/s | Available — not installed |
 | Chelsio 10GbE | 10Gb/s | Available — not installed |
 
-> When 10GbE NICs are installed, create a second bridge (`vmbr1`) for a dedicated VM storage or high-throughput network segment.
+> When 10GbE NICs are installed, a second bridge (`vmbr1`) will be created for a dedicated high-throughput network segment.
 
 ### `/etc/network/interfaces`
 
@@ -181,12 +181,12 @@ source /etc/network/interfaces.d/*
 
 | Method | Address | Requires |
 |--------|---------|----------|
-| Proxmox Web UI | https://192.168.0.103:8006 | Local network |
-| Proxmox Web UI | https://proxmox-datacenter:8006 | Tailscale |
+| Proxmox Web UI | `https://192.168.0.103:8006` | Local network |
+| Proxmox Web UI | `https://proxmox-datacenter:8006` | Tailscale MagicDNS |
 | SSH | `ssh proxmox` | Local network + `~/.ssh/config` alias |
 | SSH | `ssh root@proxmox-datacenter` | Tailscale MagicDNS |
-| iDRAC Web | https://192.168.0.105 | Local network + `tailscale down` on Fedora |
-| iDRAC SSH | `ssh root@192.168.0.105` | Local network + `tailscale down` on Fedora |
+| iDRAC Web | `https://192.168.0.105` | Local network |
+| iDRAC SSH | `ssh root@192.168.0.105` | Local network |
 
 ---
 
@@ -194,7 +194,10 @@ source /etc/network/interfaces.d/*
 
 | Issue | Workaround |
 |-------|------------|
-|None | None|
+| None | — |
+
 ---
+
+> **Security note:** MAC addresses and Tailscale IPs in this document have been redacted. Real values are maintained privately.
 
 *See also: [ip-allocation.md](ip-allocation.md) · [Hardware & Setup](../hardware/proxmox-setup.md) · [ADR-002 — Subnet Routing](../decisions/ADR-002-subnet-routing-move-to-raspi.md)*
