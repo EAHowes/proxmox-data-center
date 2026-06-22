@@ -1,6 +1,6 @@
-# k3s Worker Node Runbook PUBLIC FACING
+# Add k3s Node PUBLIC FACING
 
-**Template:** `tmpl-k3s-worker` (VM ID 100)
+**Template:** `tmpl-k3s-node` (VM ID 100)
 **Last Updated:** June 2026
 
 ---
@@ -52,7 +52,7 @@ Swap is disabled permanently via `/etc/fstab` to allow node to join k3s cluster.
 
 ### 1. Clone the Template
 
-1. Right-click `tmpl-k3s-worker` in the Proxmox sidebar → **Clone**
+1. Right-click `tmpl-k3s-node` in the Proxmox sidebar → **Clone**
 2. Set VM ID
 3. Set Name
 4. Mode: **Linked Clone**
