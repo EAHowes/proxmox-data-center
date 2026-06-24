@@ -61,7 +61,7 @@ graph LR
 
         raspi["k3s-raspi4b-1
         100.xxx.xxx.xxx
-        ⚡ subnet router
+        subnet router
         192.168.0.0/24"]
 
         omen["omen-server
