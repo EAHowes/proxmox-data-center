@@ -1,6 +1,7 @@
 # k3s Node Template
 
 > All specs, packages, and configs for a base k3s node from template.
+
 **Base OS:** Ubuntu Server 24.04.4 LTS
 
 ---
