@@ -48,7 +48,7 @@ Personal homelab running on a Dell PowerEdge R510 with Proxmox VE. This repo con
 
 | Template | Purpose |
 |----------|---------|
-| `tmpl-microservice` | Base app/API service node |
+| `tmpl-docker-compose` | Base app/API service node |
 | `tmpl-k3s-node` | k3s cluster worker or control plane |
 | `tmpl-postgres` | PostgreSQL 16 database instance |
 | `tmpl-dev-station` | Full development environment |
@@ -122,7 +122,7 @@ datacenter/
 │   │   ├── rebuild-vm.md
 │   │   └── idrac-access.md
 │   ├── templates/
-│   │   ├── microservice.md
+│   │   ├── docker-compose.md
 │   │   ├── k3s-node.md
 │   │   ├── postgres.md
 │   │   └── dev-station.md
