@@ -5,7 +5,12 @@ variable "proxmox_url" {
 }
 
 variable "proxmox_api_token" {
-  description = "Proxmox API token in format user@realm!tokenid=secret"
+  description = "Proxmox API token"
   type        = string
   sensitive   = true
+}
+
+variable "ssh_public_key" {
+  description = "SSH public key to inject into VMs"
+  type        = string
 }
