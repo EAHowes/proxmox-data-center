@@ -18,10 +18,10 @@ resource "proxmox_virtual_environment_vm" "this" {
     full  = true
   }
 
-  cpu {
-    cores = var.cores
-    type  = "x86-64-v2-AES"
-  }
+cpu {
+  cores = var.cores
+  type  = "x86-64-v2"
+}
 
   memory {
     dedicated = var.memory
