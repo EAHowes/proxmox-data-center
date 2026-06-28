@@ -47,7 +47,7 @@ cpu {
       }
     }
     user_account {
-      username = "ubuntu"
+      username = "yart"
       keys     = [var.ssh_public_key]
     }
   }
