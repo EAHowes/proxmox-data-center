@@ -6,7 +6,7 @@ variable "vm_id" {
 }
 
 variable "name" {
-  description = "VM name, e.g. k3s-worker-01"
+  description = "VM name, e.g. docker-compose-01"
   type        = string
 }
 
