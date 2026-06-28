@@ -13,4 +13,5 @@ variable "proxmox_api_token" {
 variable "ssh_public_key" {
   description = "SSH public key to inject into VMs"
   type        = string
+  sensitive   = true
 }
