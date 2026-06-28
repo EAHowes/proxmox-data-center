@@ -32,7 +32,7 @@ cpu {
     datastore_id = var.storage
     interface    = "scsi0"
     discard      = "on"
-    size         = 20
+    size         = var.disk_size
   }
 
   network_device {

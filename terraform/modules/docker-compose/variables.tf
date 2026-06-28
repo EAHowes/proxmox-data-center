@@ -27,6 +27,12 @@ variable "memory" {
   default     = 2048
 }
 
+variable "disk_size" {
+  description = "Disk size in GB"
+  type        = number
+  default     = 40
+}
+
 variable "storage" {
   description = "Proxmox storage pool to use"
   type        = string
