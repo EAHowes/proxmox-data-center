@@ -14,8 +14,7 @@ resource "proxmox_virtual_environment_vm" "this" {
   node_name = "proxmox-datacenter"
 
   clone {
-    # tmpl-k3s-worker
-    vm_id = 100
+    vm_id = 100  # tmpl-k3s-worker
     full  = true
   }
 
@@ -40,13 +39,13 @@ resource "proxmox_virtual_environment_vm" "this" {
   }
 
   initialization {
+    datastore_id = var.cloudinit_storage
     ip_config {
       ipv4 {
         address = var.ip
         gateway = var.gateway
       }
     }
-
     user_account {
       username = "ubuntu"
       keys     = [var.ssh_public_key]
@@ -54,7 +53,6 @@ resource "proxmox_virtual_environment_vm" "this" {
   }
 
   operating_system {
-    # Linux 2.6+ kernel
-    type = "l26"
+    type = "l26"  # Linux 2.6+ kernel
   }
 }

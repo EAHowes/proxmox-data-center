@@ -42,3 +42,9 @@ variable "ssh_public_key" {
   description = "SSH public key for Cloud-Init"
   type        = string
 }
+
+variable "cloudinit_storage" {
+  description = "Storage pool for Cloud-Init seed image"
+  type        = string
+  default     = "local-lvm"
+}
