@@ -1,6 +1,6 @@
-# Add k3s Node PUBLIC FACING
+# Add k3s Node VM
 
-**Template:** `tmpl-k3s-node` (VM ID 100)
+**Template:** `tmpl-k3s-worker` (VM ID 100)  
 **Last Updated:** June 2026
 
 ---
@@ -10,9 +10,9 @@
 | Setting | Value |
 |---------|-------|
 | Base OS | Ubuntu Server 24.04.4 LTS |
-| CPU | 2 cores (host type) |
-| Memory | 4096 MB |
-| Disk | 32 GB, VirtIO Block, Write Back cache |
+| CPU | 2 cores (x86-64-v2) |
+| Memory | 2048 MB (override per-node as needed) |
+| Disk | 20 GB, VirtIO SCSI, discard on |
 | Network | VirtIO, bridged via vmbr0 |
 | Storage Pool | vm-storage |
 
@@ -50,36 +50,53 @@ Swap is disabled permanently via `/etc/fstab` to allow node to join k3s cluster.
 
 ## Creating a New Worker Node
 
-### 1. Clone the Template
+> VMs are managed via Terraform. Do not clone manually through the Proxmox UI.
 
-1. Right-click `tmpl-k3s-node` in the Proxmox sidebar → **Clone**
-2. Set VM ID
-3. Set Name
-4. Mode: **Linked Clone**
-5. Storage: `vm-storage`
-6. Click **Clone**
+### 1. Add a module block to `terraform/main.tf`
 
-### 2. Update Cloud-Init Hostname
+```hcl
+module "k3s_worker_02" {
+  source         = "./modules/k3s-node"
+  vm_id          = 202
+  name           = "k3s-worker-02"
+  ip             = "192.168.0.122/24"
+  ssh_public_key = var.ssh_public_key
+}
+```
 
-To make the hostname match the node name:
+Override defaults as needed:
 
-1. Select the new VM → **Cloud-Init** tab
-2. Update the hostname field
-3. Click **Regenerate Image**
+```hcl
+module "k3s_worker_02" {
+  source         = "./modules/k3s-node"
+  vm_id          = 202
+  name           = "k3s-worker-02"
+  ip             = "192.168.0.122/24"
+  ssh_public_key = var.ssh_public_key
+  memory         = 4096  # optional override
+  cores          = 4     # optional override
+}
+```
 
-### 3. Start the VM
+### 2. Plan and apply
 
-Start the VM and wait ~30 seconds for Cloud-Init. The IP address will appear in the **Summary** tab once the VM is up.
+```bash
+cd terraform
+terraform plan
+terraform apply
+```
 
-### 4. SSH In
+Terraform will clone the template, configure Cloud-Init, and start the VM. Existing VMs are not affected.
+
+### 3. SSH In
 
 ```bash
 ssh yart@<vm-ip>
 ```
 
-No password required the SSH key is injected by Cloud-Init.
+No password required — the SSH key is injected by Cloud-Init.
 
-### 5. Join the k3s Cluster
+### 4. Join the k3s Cluster
 
 Run on the worker node:
 
@@ -88,7 +105,7 @@ curl -sfL https://get.k3s.io | K3S_URL=https://<K3S_SERVER_IP>:6443 \
   K3S_TOKEN=<JOIN_TOKEN> sh -s - agent
 ```
 
-### 6. Verify the Node Joined
+### 5. Verify the Node Joined
 
 From a machine with kubectl access:
 
@@ -100,10 +117,26 @@ The new node should appear with status `Ready` within 30–60 seconds.
 
 ---
 
+## Removing a Worker Node
+
+Remove or comment out the module block in `terraform/main.tf`, then:
+
+```bash
+cd terraform
+terraform plan
+terraform apply
+```
+
+Terraform will stop and destroy the VM cleanly.
+
+---
+
 ## Naming Convention
 
 | Item | Convention | Example |
 |------|-----------|---------|
 | VM Name | `k3s-worker-NN` | `k3s-worker-01` |
 | Hostname | Same as VM name | `k3s-worker-01` |
-| VM ID | Sequential from 101 | 101, 102, 103... |
+| IP Address | Static, sequential from .121 | 192.168.0.121, .122, .123... |
+| VM ID | Sequential from 201 | 201, 202, 203... |
+| Terraform module | `k3s_worker_NN` | `k3s_worker_01` |
