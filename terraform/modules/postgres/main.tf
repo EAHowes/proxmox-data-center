@@ -14,7 +14,7 @@ resource "proxmox_virtual_environment_vm" "this" {
   node_name = "proxmox-datacenter"
 
   clone {
-    # tmpl-docker-compose
+    # tmpl-postgres
     vm_id = 102
     full  = true
   }
