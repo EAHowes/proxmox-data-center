@@ -35,23 +35,34 @@ Personal homelab running on a Dell PowerEdge R510 with Proxmox VE. This repo con
 
 ## Spin Up a VM
 
-> Full runbook: [docs/runbooks/create-vm-from-template.md](docs/runbooks/create-vm-from-template.md)
+> Full runbooks: [docs/runbooks/](docs/runbooks/)
 
-**Quick path (Proxmox UI):**
-1. Right-click a template in the sidebar → **Clone**
-2. Set Mode to **Linked Clone** (fast, shared disk) or **Full Clone** (independent)
-3. Assign a name following the convention: `{role}-{env}-{index}` (e.g. `postgres-dev-01`)
-4. Set the target storage to `vm-storage`
-5. Start the VM — Cloud-Init handles hostname, SSH key, and network on first boot
+**Quick path (Terraform):**
+1. Add a module block to `terraform/main.tf` for the appropriate template type
+2. `cd terraform && terraform plan && terraform apply`
 
-**Available templates:**
+Cloud-Init handles hostname, SSH key, and network on first boot. SSH in with `ssh yart@<vm-ip>` — no password required.
 
-| Template | Purpose |
-|----------|---------|
-| `tmpl-docker-compose` | Base app/API service node |
-| `tmpl-k3s-node` | k3s cluster worker or control plane |
-| `tmpl-postgres` | PostgreSQL 16 database instance |
-| `tmpl-dev-station` | Full development environment |
+**Example:**
+
+```hcl
+module "svc_pihole" {
+  source         = "./modules/docker-compose"
+  vm_id          = 302
+  name           = "svc-pihole"
+  ip             = "192.168.0.132/24"
+  ssh_public_key = var.ssh_public_key
+}
+```
+
+**Available templates / modules:**
+
+| Template | Module | Purpose |
+|----------|--------|---------|
+| `tmpl-docker-compose` | `./modules/docker-compose` | App/API service node |
+| `tmpl-k3s-node` | `./modules/k3s-node` | k3s cluster worker or control plane |
+| `tmpl-postgres` | `./modules/postgres` | PostgreSQL 16 database instance |
+| `tmpl-dev-station` | `./modules/dev-station` | Full development environment |
 
 ---
 
@@ -83,10 +94,10 @@ Tailscale Overlay (100.x.x.x)
 
 | Runbook | Description |
 |---------|-------------|
-| [Create VM from Template](docs/runbooks/create-vm-from-template.md) | Clone a template and bring up a new VM |
+| [Add Docker Compose VM](docs/runbooks/add-docker-compose-vm.md) | App/API service node from the docker-compose template |
 | [Add k3s Node](docs/runbooks/add-k3s-node.md) | Spin up and join a new k3s worker |
-| [Restore Postgres Backup](docs/runbooks/restore-postgres.md) | Restore a database from backup |
-| [Rebuild VM from Scratch](docs/runbooks/rebuild-vm.md) | Full VM teardown and rebuild |
+| [Add Postgres VM](docs/runbooks/add-postgres-vm.md) | PostgreSQL 16 database instance from the postgres template |
+| [Add Dev Station VM](docs/runbooks/add-dev-station-vm.md) | Full development environment from the dev-station template |
 | [Access iDRAC During Reboot](docs/runbooks/idrac-access.md) | How to reach iDRAC when Proxmox is down |
 
 ---
@@ -107,8 +118,9 @@ Tailscale Overlay (100.x.x.x)
 ## Repo Structure
 
 ```
-datacenter/
+proxmox-data-center/
 ├── README.md
+├── .gitignore
 ├── docs/
 │   ├── hardware/
 │   │   └── proxmox-setup.md
@@ -116,10 +128,10 @@ datacenter/
 │   │   ├── topology.md
 │   │   └── ip-allocation.md
 │   ├── runbooks/
-│   │   ├── create-vm-from-template.md
+│   │   ├── add-docker-compose-vm.md
 │   │   ├── add-k3s-node.md
-│   │   ├── restore-postgres.md
-│   │   ├── rebuild-vm.md
+│   │   ├── add-postgres-vm.md
+│   │   ├── add-dev-station-vm.md
 │   │   └── idrac-access.md
 │   ├── templates/
 │   │   ├── docker-compose.md
@@ -127,7 +139,19 @@ datacenter/
 │   │   ├── postgres.md
 │   │   └── dev-station.md
 │   └── decisions/
-└── kubernetes/
+│       ├── ADR-001-k3s-over-full-kubernetes.md
+│       ├── ADR-002-subnet-routing-move-to-raspi.md
+│       ├── ADR-003-cloud-init-over-proxmox-templates.md
+│       └── ADR-004-k3s-worker-node-template-hardware-reasoning.md
+└── terraform/
+    ├── main.tf
+    ├── providers.tf
+    ├── variables.tf
+    └── modules/
+        ├── docker-compose/
+        ├── k3s-node/
+        ├── postgres/
+        └── dev-station/
 ```
 
 ---
