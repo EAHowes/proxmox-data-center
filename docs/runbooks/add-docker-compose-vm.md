@@ -1,6 +1,6 @@
-# Add Docker Compose VM PUBLIC FACING
+# Add Docker Compose VM
 
-**Template:** `tmpl-docker-compose` (VM ID 101)
+**Template:** `tmpl-docker-compose` (VM ID 101)  
 **Last Updated:** June 2026
 
 ---
@@ -10,9 +10,9 @@
 | Setting | Value |
 |---------|-------|
 | Base OS | Ubuntu Server 24.04.4 LTS |
-| CPU | 2 cores (host type) |
-| Memory | 4096 MB |
-| Disk | 40 GB, SCSI, Write Back cache |
+| CPU | 2 cores (x86-64-v2) |
+| Memory | 2048 MB (override per-VM as needed) |
+| Disk | 40 GB, VirtIO SCSI, discard on |
 | Network | VirtIO, bridged via vmbr0 |
 | Storage Pool | vm-storage |
 
@@ -32,27 +32,45 @@
 
 ## Creating a New Docker Compose VM
 
-### 1. Clone the Template
+> VMs are managed via Terraform. Do not clone manually through the Proxmox UI.
 
-1. Right-click `tmpl-docker-compose` in the Proxmox sidebar → **Clone**
-2. Set VM ID
-3. Set Name
-4. Mode: **Full Clone**
-5. Storage: `vm-storage`
-6. Click **Clone**
+### 1. Add a module block to `terraform/main.tf`
 
-### 2. Set Static IP via Cloud-Init
+```hcl
+module "svc_pihole" {
+  source         = "./modules/docker-compose"
+  vm_id          = 302
+  name           = "svc-pihole"
+  ip             = "192.168.0.132/24"
+  ssh_public_key = var.ssh_public_key
+}
+```
 
-1. Select the new VM → **Cloud-Init** tab
-2. Set **IP Config (net0)** to `ip=192.168.0.XXX/24,gw=192.168.0.1`
-3. Update the hostname field to match the service name
-4. Click **Regenerate Image**
+Override defaults as needed:
 
-### 3. Start the VM
+```hcl
+module "svc_pihole" {
+  source         = "./modules/docker-compose"
+  vm_id          = 302
+  name           = "svc-pihole"
+  ip             = "192.168.0.132/24"
+  ssh_public_key = var.ssh_public_key
+  memory         = 4096  # optional override
+  disk_size      = 80    # optional override for data-heavy services
+}
+```
 
-Start the VM and wait ~30 seconds for Cloud-Init. The IP address will appear in the **Summary** tab once the VM is up.
+### 2. Plan and apply
 
-### 4. SSH In
+```bash
+cd terraform
+terraform plan
+terraform apply
+```
+
+Terraform will clone the template, set the static IP via Cloud-Init, and start the VM. Existing VMs are not affected.
+
+### 3. SSH In
 
 ```bash
 ssh yart@<vm-ip>
@@ -60,14 +78,14 @@ ssh yart@<vm-ip>
 
 No password required — the SSH key is injected by Cloud-Init.
 
-### 5. Open Firewall Ports for Your Service
+### 4. Open Firewall Ports for Your Service
 
 ```bash
 sudo ufw allow <port>/tcp
 sudo ufw reload
 ```
 
-### 6. Create Your Compose File and Start the Service
+### 5. Create Your Compose File and Start the Service
 
 ```bash
 mkdir ~/my-service && cd ~/my-service
@@ -75,12 +93,26 @@ nano docker-compose.yml
 docker compose up -d
 ```
 
-### 7. Verify the Service is Running
+### 6. Verify the Service is Running
 
 ```bash
 docker compose ps
 docker compose logs
 ```
+
+---
+
+## Removing a VM
+
+Remove or comment out the module block in `terraform/main.tf`, then:
+
+```bash
+cd terraform
+terraform plan
+terraform apply
+```
+
+Terraform will stop and destroy the VM cleanly.
 
 ---
 
@@ -90,14 +122,6 @@ docker compose logs
 |------|-----------|---------|
 | VM Name | `svc-<service>` | `svc-pihole` |
 | Hostname | Same as VM name | `svc-pihole` |
-| IP Address | Static, sequential from .110 | 192.168.0.110, .111, .112... |
-| VM ID | Sequential from 200 | 200, 201, 202... |
-
----
-
-## Notes
-
-- Use **Full Clone** (not Linked) so each VM is fully independent
-- UFW only allows SSH by default — open service ports manually after cloning
-- Memory and CPU can be adjusted per-clone depending on service requirements
-- For services with large data volumes, consider adding a second disk rather than expanding the OS disk
+| IP Address | Static, sequential from .131 | 192.168.0.131, .132, .133... |
+| VM ID | Sequential from 301 | 301, 302, 303... |
+| Terraform module | `svc_<service>` | `svc_pihole` |
