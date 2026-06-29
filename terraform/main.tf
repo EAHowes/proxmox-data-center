@@ -13,3 +13,11 @@ module "docker_compose_01" {
   ip             = "192.168.0.131/24"
   ssh_public_key = var.ssh_public_key
 }
+
+module "postgres_dev_01" {
+  source         = "./modules/postgres"
+  vm_id          = 401
+  name           = "postgres-dev-01"
+  ip             = "192.168.0.141/24"
+  ssh_public_key = var.ssh_public_key
+}
