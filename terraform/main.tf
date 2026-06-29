@@ -21,3 +21,11 @@ module "postgres_dev_01" {
   ip             = "192.168.0.141/24"
   ssh_public_key = var.ssh_public_key
 }
+
+module "dev_station_01" {
+  source         = "./modules/dev-station"
+  vm_id          = 501
+  name           = "dev-station-01"
+  ip             = "192.168.0.151/24"
+  ssh_public_key = var.ssh_public_key
+}
