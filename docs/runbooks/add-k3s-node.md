@@ -26,7 +26,6 @@
 | htop, tmux | Monitoring and terminal multiplexer |
 | net-tools, iproute2 | Network debugging |
 | nfs-common | NFS client for persistent storage |
-| open-iscsi | iSCSI support for storage backends |
 | cloud-init | First-boot configuration |
 
 ### Kernel Configuration
@@ -50,7 +49,7 @@ Swap is disabled permanently via `/etc/fstab` to allow node to join k3s cluster.
 
 ## Creating a New Worker Node
 
-> VMs are managed via Terraform. Do not clone manually through the Proxmox UI.
+> VMs are managed via Terraform.
 
 ### 1. Add a module block to `terraform/main.tf`
 
@@ -86,15 +85,13 @@ terraform plan
 terraform apply
 ```
 
-Terraform will clone the template, configure Cloud-Init, and start the VM. Existing VMs are not affected.
-
 ### 3. SSH In
 
 ```bash
 ssh yart@<vm-ip>
 ```
 
-No password required — the SSH key is injected by Cloud-Init.
+SSH key is injected by Cloud-Init.
 
 ### 4. Join the k3s Cluster
 
@@ -112,8 +109,6 @@ From a machine with kubectl access:
 ```bash
 kubectl get nodes
 ```
-
-The new node should appear with status `Ready` within 30–60 seconds.
 
 ---
 

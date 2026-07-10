@@ -68,15 +68,13 @@ terraform plan
 terraform apply
 ```
 
-Terraform will clone the template, set the static IP via Cloud-Init, and start the VM. Existing VMs are not affected.
-
 ### 3. SSH In
 
 ```bash
 ssh yart@<vm-ip>
 ```
 
-No password required — the SSH key is injected by Cloud-Init.
+SSH key is injected by Cloud-Init.
 
 ### 4. Open Firewall Ports for Your Service
 
@@ -111,8 +109,6 @@ cd terraform
 terraform plan
 terraform apply
 ```
-
-Terraform will stop and destroy the VM cleanly.
 
 ---
 
