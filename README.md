@@ -41,7 +41,7 @@ Personal homelab running on a Dell PowerEdge R510 with Proxmox VE. This repo con
 1. Add a module block to `terraform/main.tf` for the appropriate template type
 2. `cd terraform && terraform plan && terraform apply`
 
-Cloud-Init handles hostname, SSH key, and network on first boot. SSH in with `ssh yart@<vm-ip>` — no password required.
+Cloud-Init handles hostname, SSH key, and network on first boot. SSH in with `ssh yart@<vm-ip>`, no password required.
 
 **Example:**
 
@@ -153,18 +153,3 @@ proxmox-data-center/
         ├── postgres/
         └── dev-station/
 ```
-
----
-
-## Current Status
-
-**Proxmox:** Online · `192.168.0.103` · Proxmox VE 9.2.3
-
-**Open issues:**
-- iDRAC6 virtual console non-functional (Java incompatibility)
-
-See [Known Issues](docs/hardware/proxmox-setup.md#known-issues) for full details and workarounds.
-
----
-
-*Last updated: June 2026*
