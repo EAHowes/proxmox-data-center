@@ -29,19 +29,8 @@
 | qemu-guest-agent | Proxmox integration |
 | docker-ce | Container runtime |
 | docker-compose-plugin | Docker Compose v2 |
-| curl | HTTP utility |
-| wget | HTTP utility |
+| curl | HTTP |
 | git | Version control |
-| htop | Interactive process monitor |
-| ufw | Firewall management |
+| htop |Process monitor |
+| ufw | Firewall |
 | openssh-server | Remote access |
-
----
-
-## System Configuration
-
-**Docker:** Installed via official `get.docker.com` script, enabled at boot
-
-**UFW:** Active — OpenSSH allowed by default.
-
-**User:** `yart` is in the `docker` group, thus no sudo required to run Docker commands
