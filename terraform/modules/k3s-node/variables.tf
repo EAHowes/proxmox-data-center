@@ -23,7 +23,7 @@ variable "cores" {
 variable "memory" {
   description = "RAM in MB"
   type        = number
-  default     = 2048
+  default     = 4096
 }
 
 variable "storage" {

@@ -41,6 +41,9 @@ cpu {
 
   initialization {
     datastore_id = var.cloudinit_storage
+    dns {
+      servers = ["192.168.0.1"]
+    }
     ip_config {
       ipv4 {
         address = var.ip

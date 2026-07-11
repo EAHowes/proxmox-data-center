@@ -29,9 +29,9 @@ cpu {
 
   disk {
     datastore_id = var.storage
-    interface    = "scsi0"
+    interface    = "virtio0"
     discard      = "on"
-    size         = 20
+    size         = 32
   }
 
   network_device {
@@ -40,6 +40,9 @@ cpu {
 
   initialization {
     datastore_id = var.cloudinit_storage
+    dns {
+      servers = ["192.168.0.1"]
+    }
     ip_config {
       ipv4 {
         address = var.ip
