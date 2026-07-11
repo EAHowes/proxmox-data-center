@@ -30,6 +30,14 @@ module "k3s_worker_04" {
   ssh_public_key = var.ssh_public_key
 }
 
+module "k3s_worker_05" {
+  source         = "./modules/k3s-node"
+  vm_id          = 205
+  name           = "k3s-worker-05"
+  ip             = "192.168.0.125/24"
+  ssh_public_key = var.ssh_public_key
+}
+
 module "docker_compose_01" {
   source         = "./modules/docker-compose"
   vm_id          = 301
