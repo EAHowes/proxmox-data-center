@@ -1,3 +1,13 @@
+module "k3s_control_plane_01" {
+  source         = "./modules/k3s-node"
+  vm_id          = 206
+  name           = "k3s-control-plane-01"
+  ip             = "192.168.0.126/24"
+  ssh_public_key = var.ssh_public_key
+  memory         = 8192
+  cores          = 4
+}
+
 module "k3s_worker_01" {
   source         = "./modules/k3s-node"
   vm_id          = 201
