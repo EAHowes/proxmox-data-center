@@ -1,6 +1,6 @@
 # Proxmox Datacenter
 
-Personal homelab running on a Dell PowerEdge R510 with Proxmox VE. This repo contains documentation for infrastructure, configuration, and automation.
+Personal homelab running on a Dell PowerEdge R510 with Proxmox VE. This repo contains documentation for infrastructure, configuration, and terraform automation.
 
 > For security, some information has been redacted or omitted from this repo and is maintained privately.
 ---
